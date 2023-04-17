@@ -1,6 +1,6 @@
 <?php
 
-require 'config/database.php';
+require '../config/database.php';
 ?>
 
 
@@ -33,7 +33,7 @@ require 'config/database.php';
                 <div class="avatar">
                     <img src="./images/image_avatar.jpg">
                     <ul>
-                        <li><a href="<?= ROOT_URL ?>admin/dashboard.php">Приборная панель</a></li>
+                        <li><a href="<?= ROOT_URL ?>admin/index.php">Приборная панель</a></li>
                         <li><a href="<?= ROOT_URL ?>logout.php">Выход</a></li>
                     </ul>
                 </div>

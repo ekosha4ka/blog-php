@@ -11,7 +11,7 @@ include 'partials/header.php';
                 <li><a href="add-post.php"><i class="uil uil-pen"></i>
                     <h5>Добавить публикацию</h5>
                 </a></li>
-                <li><a href="dashboard.php" class="active"><i class="uil uil-postcard"></i>
+                <li><a href="index.php" class="active"><i class="uil uil-postcard"></i>
                     <h5>Управление публикациями</h5>
                 </a></li>
                 <li><a href="add-user.php"><i class="uil uil-user-plus"></i>

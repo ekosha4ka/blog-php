@@ -28,8 +28,8 @@ require 'config/database.php';
             <li><a href="<?= ROOT_URL ?>about.php">О нас</a></li>
             <li><a href="<?= ROOT_URL ?>services.php">Сервисы</a></li>
             <li><a href="<?= ROOT_URL ?>contact.php">Контакты</a></li>
-            <!-- <li><a href="<?= ROOT_URL ?>singin.php">Вход</a></li> -->
-            <li class="nav__profile">
+            <li><a href="<?= ROOT_URL ?>signin.php">Вход</a></li>
+            <!-- <li class="nav__profile">
                 <div class="avatar">
                     <img src="./images/image_avatar.jpg">
                     <ul>
@@ -37,7 +37,7 @@ require 'config/database.php';
                         <li><a href="<?= ROOT_URL ?>logout.php">Выход</a></li>
                     </ul>
                 </div>
-            </li>
+            </li> -->
         </ul>
         <button id="open__nav-btn"><i class="uil uil-bars"></i></button>
         <button id="close__nav-btn"><i class="uil uil-times"></i></button>

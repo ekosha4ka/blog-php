@@ -11,11 +11,11 @@ include 'partials/header.php';
             <p>This is an success message</p>
         </div>
         <form action="">
-            <input type="text" placeholder="Никнейм или Email">
+            <input type="text" placeholder="Имя пользователя или Email">
             <input type="password" placeholder="Пароль">
             
             <button type="submit" class="btn">Войти</button>
-            <small>Нету аккаунта? <a href="signup.html">Регистрация</a></small>
+            <small>Нету аккаунта? <a href="signup.php">Регистрация</a></small>
         </form>
     </div>
 </section>

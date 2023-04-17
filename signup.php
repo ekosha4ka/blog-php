@@ -10,19 +10,19 @@ include 'partials/header.php';
         <div class="alert__message error">
             <p>This is an error message</p>
         </div>
-        <form action="" enctype="multipart/form-data">
-            <input type="text" placeholder="Имя">
-            <input type="text" placeholder="Фамилия">
-            <input type="text" placeholder="Никнейм">
-            <input type="email" placeholder="Email">
-            <input type="password" placeholder="Пароль">
-            <input type="password" placeholder="Повторить пароль">
+        <form action="<?= ROOT_URL ?>signup-logic.php" enctype="multipart/form-data" method="POST">
+            <input type="text" name="firstname" placeholder="Имя">
+            <input type="text" name="lastname" placeholder="Фамилия">
+            <input type="text" name="username" placeholder="Имя пользователя">
+            <input type="email" name="email" placeholder="Email">
+            <input type="password" name="createpassword" placeholder="Пароль">
+            <input type="password" name="confirmpassword" placeholder="Повторить пароль">
             <div class="form__control">
                 <label for="avatar">Выбрать аватар</label>
-                <input type="file" id="avatar">
+                <input type="file" name="avatar" id="avatar">
             </div>
-            <button type="submit" class="btn">Регистрация</button>
-            <small>Уже есть аккаунт? <a href="signin.html">Войти в систему</a></small>
+            <button type="submit" name="submit" class="btn">Регистрация</button>
+            <small>Уже есть аккаунт? <a href="signin.php">Войти в систему</a></small>
         </form>
     </div>
 </section>

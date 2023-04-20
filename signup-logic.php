@@ -38,20 +38,55 @@ if(isset($_POST['submit'])) {
             $hashed_password = password_hash($createpassword, PASSWORD_DEFAULT);
 
             // проверка, есть ли имя пользователя или почта в базе данных
+            global $connection;
             $user_check_query = "SELECT * FROM users WHERE username='$username' OR email='$email'";
             $user_check_result = mysqli_query($connection, $user_check_query);
-            if(mysqli_num_rows($user_check_result > 0)) {
+            if(mysqli_num_rows($user_check_result) > 0) {
                 $_SESSION['signup'] = "Имя пользователя или почта уже существует.";
             } else {
                 // работа над аватаром
-                
+                $time = time(); // сделает каждое изображение уникальным, используя текущую временную метку 
+                $avatar_name = $time . $avatar['name'];
+                $avatar_tmp_name = $avatar['tmp_name'];
+                $avatar_destination_path = 'images/' . $avatar_name;
+
+                // Является ли файл изображением 
+                $allowed_files = ['png', 'jpg', 'jpeg'];
+                $extention = explode('.', $avatar_name);
+                $extention = end($extention);
+                if(in_array($extention, $allowed_files)) {
+                    //Проверка, что изображение не слишком большое 1mb
+                    if($avatar['size'] < 1000000) {
+                        // upload avatar
+                        move_uploaded_file($avatar_tmp_name, $avatar_destination_path);
+                    } else {
+                        $_SESSION['signup'] = 'Файл является слишком большим.';
+                    }
+               } else {
+                    $_SESSION['signup'] = 'Файл не является изображением формата png, jpg, jpeg.';
+                }
             }
         }
+    }
+    
+    // возвращение на регистрацию если была какая-то проблема.
+    if($_SESSION['signup']) {
+        header('location: ' . ROOT_URL . 'signup.php');
+        die();
+    } else {
+        // Добавление нового пользователя в список пользователей.
+        $insert_user_query = "INSERT INTO users (firstname, lastname, username, email, password, avatar, is_admin) VALUES('$firstname', '$lastname', '$username', '$email', '$hashed_password', '$avatar_name', 0'";
 
+        if(!mysqli_errno($connection)) {
+            // Переход на страницу с успехом
+            $_SESSION['signup_success'] = "Регистрация успешна! Пожалуйста, выполните вход.";
+            header('location: ' . ROOT_URL . 'signin.php');
+            die();
+        }
     }
 
 } else {
      //если кнопка не была нажата, вернитесь к регистрации
-     header('location: ' . ROOT_URL . 'signup.php');
+    header('location: ' . ROOT_URL . 'signup.php');
      die();
 }

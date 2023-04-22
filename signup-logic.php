@@ -1,5 +1,4 @@
 <?php
-
 require 'config/database.php';
 
 // получить данные формы регистрации, если была нажата кнопка регистрации
@@ -38,7 +37,6 @@ if(isset($_POST['submit'])) {
             $hashed_password = password_hash($createpassword, PASSWORD_DEFAULT);
 
             // проверка, есть ли имя пользователя или почта в базе данных
-            global $connection;
             $user_check_query = "SELECT * FROM users WHERE username='$username' OR email='$email'";
             $user_check_result = mysqli_query($connection, $user_check_query);
             if(mysqli_num_rows($user_check_result) > 0) {
@@ -70,13 +68,14 @@ if(isset($_POST['submit'])) {
     }
     
     // возвращение на регистрацию если была какая-то проблема.
-    if($_SESSION['signup']) {
+    if(isset($_SESSION['signup'])) {
+        $_SESSION['signup-data'] = $_POST;
         header('location: ' . ROOT_URL . 'signup.php');
         die();
     } else {
         // Добавление нового пользователя в список пользователей.
-        $insert_user_query = "INSERT INTO users (firstname, lastname, username, email, password, avatar, is_admin) VALUES('$firstname', '$lastname', '$username', '$email', '$hashed_password', '$avatar_name', 0'";
-
+        $insert_user_query = "INSERT INTO users SET firstname='$firstname', lastname='$lastname', username='$username', email='$email', password='$hashed_password', avatar='$avatar_name', is_admin=0";
+        $insert_user_result = mysqli_query($connection, $insert_user_query);
         if(!mysqli_errno($connection)) {
             // Переход на страницу с успехом
             $_SESSION['signup_success'] = "Регистрация успешна! Пожалуйста, выполните вход.";

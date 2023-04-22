@@ -1,7 +1,12 @@
 <?php
 
 require 'config/database.php';
-
+if (isset($_SESSION['user-id'])) {
+    $id = filter_var($_SESSION['user_id'], FILTER_SANITIZE_NUMBER_INT);
+    $query = "SELECT avatar FROM users WHERE id='$id'";
+    $result = mysqli_query($connection, $query);
+    $avatar = mysqli_fetch_assoc($result);
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,16 +33,19 @@ require 'config/database.php';
             <li><a href="<?= ROOT_URL ?>about.php">О нас</a></li>
             <li><a href="<?= ROOT_URL ?>services.php">Сервисы</a></li>
             <li><a href="<?= ROOT_URL ?>contact.php">Контакты</a></li>
-            <li><a href="<?= ROOT_URL ?>signin.php">Вход</a></li>
-            <!-- <li class="nav__profile">
+            <?php if(isset($_SESSION['user-id'])): ?>
+            <li class="nav__profile">
                 <div class="avatar">
-                    <img src="./images/image_avatar.jpg">
+                    <img src="<?php ROOT_URL . 'images/' . $avatar['avatar'] ?>">
                     <ul>
                         <li><a href="<?= ROOT_URL ?>admin/index.php">Приборная панель</a></li>
                         <li><a href="<?= ROOT_URL ?>logout.php">Выход</a></li>
                     </ul>
                 </div>
-            </li> -->
+            </li> 
+            <?php else : ?> 
+            <li><a href="<?= ROOT_URL ?>singin.php">Вход</a></li>
+           <?php endif ?>
         </ul>
         <button id="open__nav-btn"><i class="uil uil-bars"></i></button>
         <button id="close__nav-btn"><i class="uil uil-times"></i></button>

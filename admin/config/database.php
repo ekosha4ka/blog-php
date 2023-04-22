@@ -1,6 +1,6 @@
 <?php
 
-require 'contstants.php';
+require_once 'contstants.php';
 
 // Подключение к базе данных!!!
 

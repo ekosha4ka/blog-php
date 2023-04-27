@@ -48,7 +48,7 @@ if(isset($_POST['submit'])) {
                 $time = time(); // сделает каждое изображение уникальным, используя текущую временную метку 
                 $avatar_name = $time . $avatar['name'];
                 $avatar_tmp_name = $avatar['tmp_name'];
-                $avatar_destination_path = 'images/' . $avatar_name;
+                $avatar_destination_path = '../images/' . $avatar_name;
 
                 // Является ли файл изображением 
                 $allowed_files = ['png', 'jpg', 'jpeg'];

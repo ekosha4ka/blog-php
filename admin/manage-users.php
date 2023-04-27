@@ -1,11 +1,10 @@
 <?php
 
 include 'partials/header.php';
-// извлекать пользователей из базы данных, но не текущего пользователя
-$current_admin_id = $_SESSION['user_id'];
-$query = "SELECT * FROM users WHERE NOT id='$current_admin_id'";
-$users = mysqli_query($connection, $query);
-
+ // извлекать пользователей из базы данных, но не текущего пользователя
+$current_admin_id = $_SESSION['user-id'];
+$query = "SELECT * FROM users WHERE NOT id=$current_admin_id";
+$users = mysqli_query($connection, $query);   
 ?>
 
 <section class="dashboard">
@@ -14,6 +13,22 @@ $users = mysqli_query($connection, $query);
             <p>
                 <?= $_SESSION['add-user_success'];
                 unset($_SESSION['add-user_success']);
+                ?>
+            </p>
+        </div>
+    <?php elseif(isset($_SESSION['edit-user-success'])) : ?>
+        <div class="alert__message success container">
+            <p>
+                <?= $_SESSION['edit-user-success'];
+                unset($_SESSION['edit-user-success']);
+                ?>
+            </p>
+        </div>
+    <?php elseif(isset($_SESSION['delete-user-success'])) : ?>
+        <div class="alert__message success container">
+            <p>
+                <?= $_SESSION['delete-user-success'];
+                unset($_SESSION['delete-user-success']);
                 ?>
             </p>
         </div>
@@ -61,7 +76,7 @@ $users = mysqli_query($connection, $query);
                         <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
                         <td><?= $user['username'] ?></td>
                         <td><a href="<?php ROOT_URL ?>edit-user.php?id=<?= $user['id'] ?>" class="btn sm">Редактировать</a></td>
-                        <td><a href="<?php ROOT_URL ?>admin/delete-user.php?id=<?= $user['id'] ?>" class="btn sm danger">Удалить</a></td>
+                        <td><a href="<?php ROOT_URL ?>delete-user.php?id=<?= $user['id'] ?>" class="btn sm danger">Удалить</a></td>
                         <td><?= $user['is_admin'] ? 'Да' : 'Нет' ?></td>
                     </tr>
                     <?php endwhile ?>

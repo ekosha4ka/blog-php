@@ -1,10 +1,23 @@
 <?php
 
 include 'partials/header.php';
+// извлекать пользователей из базы данных, но не текущего пользователя
+$current_admin_id = $_SESSION['user_id'];
+$query = "SELECT * FROM users WHERE NOT id='$current_admin_id'";
+$users = mysqli_query($connection, $query);
 
 ?>
 
 <section class="dashboard">
+    <?php if(isset($_SESSION['add-user_success'])) : ?>
+        <div class="alert__message success container">
+            <p>
+                <?= $_SESSION['add-user_success'];
+                unset($_SESSION['add-user_success']);
+                ?>
+            </p>
+        </div>
+    <?php endif ?>
     <div class="container dashboard__container">
         <aside>
             <ul>
@@ -18,13 +31,13 @@ include 'partials/header.php';
                     <li><a href="add-user.php"><i class="uil uil-user-plus"></i>
                         <h5>Добавить пользователя</h5>
                     </a></li>
-                    <li><a href="manage-users.php"><i class="uil uil-users-alt"></i>
+                    <li><a href="manage-users.php" class="active"><i class="uil uil-users-alt"></i>
                         <h5>Управление пользователями</h5>
                     </a></li>
                     <li><a href="add-category.php"><i class="uil uil-list-ul"></i>
                         <h5>Добавить категории</h5>
                     </a></li>
-                    <li><a href="manage-categories.php" class="active"><i class="uil uil-edit-alt"></i>
+                    <li><a href="manage-categories.php"><i class="uil uil-edit-alt"></i>
                         <h5>Управление категориями</h5>
                     </a></li>
                 <?php endif ?>
@@ -35,35 +48,23 @@ include 'partials/header.php';
             <table>
                 <thead>
                     <tr>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
+                        <th>Имя и Фамилия</th>
+                        <th>Имя пользователя</th>
                         <th>Редактировать</th>
-                        <th>Delete</th>
+                        <th>Удалить</th>
                         <th>Админ</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php while($user = mysqli_fetch_assoc($users)) : ?>
                     <tr>
-                        <td>Yelkhan</td>
-                        <td>Amangeldi</td>
-                        <td><a href="edit-user.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-user.php" class="btn sm danger">Delete</a></td>
-                        <td>Yes</td>
+                        <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
+                        <td><?= $user['username'] ?></td>
+                        <td><a href="<?php ROOT_URL ?>edit-user.php?id=<?= $user['id'] ?>" class="btn sm">Редактировать</a></td>
+                        <td><a href="<?php ROOT_URL ?>admin/delete-user.php?id=<?= $user['id'] ?>" class="btn sm danger">Удалить</a></td>
+                        <td><?= $user['is_admin'] ? 'Да' : 'Нет' ?></td>
                     </tr>
-                    <tr>
-                        <td>Aigerim</td>
-                        <td>Bekzatovna</td>
-                        <td><a href="edit-user.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-user.php" class="btn sm danger">Delete</a></td>
-                        <td>Yes</td>
-                    </tr>
-                    <tr>
-                        <td>Kairat</td>
-                        <td>Kairzhanov</td>
-                        <td><a href="edit-user.php" class="btn sm">Edit</a></td>
-                        <td><a href="delete-user.php" class="btn sm danger">Delete</a></td>
-                        <td>Yes</td>
-                    </tr>
+                    <?php endwhile ?>
                 </tbody>
             </table>
         </main>
@@ -75,6 +76,6 @@ include 'partials/header.php';
 
 <?php
 
-include 'partials/footer.php';
+include '../partials/footer.php';
 
 ?>

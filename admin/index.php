@@ -24,7 +24,7 @@ include 'partials/header.php';
                     <li><a href="add-category.php"><i class="uil uil-list-ul"></i>
                         <h5>Добавить категории</h5>
                     </a></li>
-                    <li><a href="manage-categories.php" class="active"><i class="uil uil-edit-alt"></i>
+                    <li><a href="manage-categories.php"><i class="uil uil-edit-alt"></i>
                         <h5>Управление категориями</h5>
                     </a></li>
                 <?php endif ?>

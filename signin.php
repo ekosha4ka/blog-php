@@ -12,7 +12,7 @@ unset($_SESSION['signin-data']);
     <div class="container form__section-container">
         <h2>Войти</h2>
         <?php if(isset($_SESSION['signup_success'])) : ?>
-            <div class="alert__message success">
+        <div class="alert__message success">
             <p>
                 <?= $_SESSION['signup_success'];
                 unset($_SESSION['signup_success']);

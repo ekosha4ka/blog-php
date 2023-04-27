@@ -54,8 +54,4 @@ if (isset($_SESSION['user-id'])) {
     </div>
 </nav>
 <!-- ----------------------END NAVBAR---------------------- -->
-<?php
 
-echo $avatar['avatar'];
-
-?>

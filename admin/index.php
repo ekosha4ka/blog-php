@@ -2,6 +2,7 @@
 
 include 'partials/header.php';
 
+
 ?>
 
 <section class="dashboard">

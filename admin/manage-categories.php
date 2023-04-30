@@ -2,6 +2,9 @@
 
 include 'partials/header.php';
 
+// извлечь категории из базы данных
+$query = "SELECT * FROM categories ORDER BY title";
+$categories = mysqli_query($connection, $query);
 ?>
 
 <section class="dashboard">
@@ -13,7 +16,15 @@ include 'partials/header.php';
                 ?>
             </p>
         </div>
-        <?php endif ?>
+    <?php elseif (isset($_SESSION['edit-category-success'])) : ?>
+        <div class="alert__message success">
+            <p>
+                <?= $_SESSION['edit-category-success'];
+                unset($_SESSION['edit-category-success']);
+                ?>
+            </p>
+        </div>
+    <?php endif ?>
     <div class="container dashboard__container">
         <aside>
             <ul>
@@ -41,32 +52,28 @@ include 'partials/header.php';
         </aside>
         <main>
             <h2>Управление категориями</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>Редактировать</th>
-                        <th>Удалить</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Путешествовать</td>
-                        <td><a href="edit-category.php" class="btn sm">Редактировать</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Удалить</a></td>
-                    </tr>
-                    <tr>
-                        <td>Еда</td>
-                        <td><a href="edit-category.php" class="btn sm">Редактировать</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Удалить</a></td>
-                    </tr>
-                    <tr>
-                        <td>Дикая жизнь</td>
-                        <td><a href="edit-category.php" class="btn sm">Редактировать</a></td>
-                        <td><a href="delete-category.php" class="btn sm danger">Удалить</a></td>
-                    </tr>
-                </tbody>
-            </table>
+            <?php if(mysqli_num_rows($categories) > 0) : ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Редактировать</th>
+                            <th>Удалить</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while($category = mysqli_fetch_assoc($categories)) : ?>
+                        <tr>
+                            <td><?= "{$category['title']}" ?></td>
+                            <td><a href="<?php ROOT_URL ?>edit-category.php?id=<?= $category['id'] ?>" class="btn sm">Редактировать</a></td>
+                            <td><a href="<?php ROOT_URL ?>delete-category.php?=<?= $category['id'] ?>" class="btn sm danger">Удалить</a></td>
+                        </tr>
+                        <?php endwhile ?>
+                    </tbody>
+                </table>
+            <?php else : ?>
+                <div class="alert__message error"><?php "Категории отсутствуют" ?></div>
+            <?php endif ?>
         </main>
     </div>
 </section>

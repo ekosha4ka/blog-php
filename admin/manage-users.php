@@ -60,28 +60,32 @@ $users = mysqli_query($connection, $query);
         </aside>
         <main>
             <h2>Управление пользователями</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Имя и Фамилия</th>
-                        <th>Имя пользователя</th>
-                        <th>Редактировать</th>
-                        <th>Удалить</th>
-                        <th>Админ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($user = mysqli_fetch_assoc($users)) : ?>
-                    <tr>
-                        <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
-                        <td><?= $user['username'] ?></td>
-                        <td><a href="<?php ROOT_URL ?>edit-user.php?id=<?= $user['id'] ?>" class="btn sm">Редактировать</a></td>
-                        <td><a href="<?php ROOT_URL ?>delete-user.php?id=<?= $user['id'] ?>" class="btn sm danger">Удалить</a></td>
-                        <td><?= $user['is_admin'] ? 'Да' : 'Нет' ?></td>
-                    </tr>
-                    <?php endwhile ?>
-                </tbody>
-            </table>
+            <?php if(mysqli_num_rows($users) > 0) : ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Имя и Фамилия</th>
+                            <th>Имя пользователя</th>
+                            <th>Редактировать</th>
+                            <th>Удалить</th>
+                            <th>Админ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while($user = mysqli_fetch_assoc($users)) : ?>
+                        <tr>
+                            <td><?= "{$user['firstname']} {$user['lastname']}" ?></td>
+                            <td><?= $user['username'] ?></td>
+                            <td><a href="<?php ROOT_URL ?>edit-user.php?id=<?= $user['id'] ?>" class="btn sm">Редактировать</a></td>
+                            <td><a href="<?php ROOT_URL ?>delete-user.php?id=<?= $user['id'] ?>" class="btn sm danger">Удалить</a></td>
+                            <td><?= $user['is_admin'] ? 'Да' : 'Нет' ?></td>
+                        </tr>
+                        <?php endwhile ?>
+                    </tbody>
+                </table>
+            <?php else : ?>
+                <div class="alert__message error"><?= "Пользователи отсутствуют." ?></div>
+            <?php endif ?>
         </main>
     </div>
 </section>

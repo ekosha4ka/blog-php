@@ -22,9 +22,9 @@ $categories = mysqli_query($connection, $query);
         <?php endif ?>
         <form action="<?= ROOT_URL ?>admin/add-post-logic.php" enctype="multipart/form-data" method="POST">
             <input type="text" name="title" placeholder="Название поста">
-            <select name="category">
+            <select name="category_id">
                 <?php while($category = mysqli_fetch_assoc($categories)) : ?>
-                    <option value="1"><?= $category['title'] ?></option>
+                    <option value="<?= $category['id'] ?>" ><?= $category['title'] ?></option>
                 <?php endwhile ?>
             </select>
             <textarea rows="10" name="body" placeholder="Описание"></textarea>

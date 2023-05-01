@@ -24,7 +24,15 @@ $posts = mysqli_query($connection, $query);
                 ?>
             </p>
         </div>
-    <?php endif ?>
+    <?php elseif(isset($_SESSION['delete-post-success'])) :  ?>
+        <div class="alert__message success container">
+            <p>
+                <?= $_SESSION['delete-post-success'];
+                unset($_SESSION['delete-post-success']);
+                ?>
+            </p>
+        </div>
+    <?php endif ?>    
     <div class="container dashboard__container">
         <aside>
             <ul>
@@ -74,7 +82,7 @@ $posts = mysqli_query($connection, $query);
                             <td><?= $post['title'] ?></td>
                             <td><?= $category['title'] ?></td>
                             <td><a href="<?= ROOT_URL ?>admin/edit-post.php?id=<?= $post['id'] ?>" class="btn sm">Edit</a></td>
-                            <td><a href="<?= ROOT_URL ?>admin/delete-user.php?id=<?= $post['id'] ?>" class="btn sm danger">Delete</a></td>
+                            <td><a href="<?= ROOT_URL ?>admin/delete-post.php?id=<?= $post['id'] ?>" class="btn sm danger">Delete</a></td>
                         </tr>
                     <?php endwhile ?>
                     </tbody>

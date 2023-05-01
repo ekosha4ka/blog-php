@@ -2,29 +2,44 @@
 
 include 'partials/header.php';
 
+// Вывод рекомендумого поста из база данных
+$featured_query = "SELECT * FROM posts WHERE is_featured=1";
+$featured_result = mysqli_query($connection, $featured_query);
+$featured = mysqli_fetch_assoc($featured_result);
 ?>
-<section class="featured">
-    <div class="container featured__container">
-        <div class="post__thumbnail">
-            <img src="./images/image_art1.jpg">
-        </div>
-        <div class="post__info">
-            <a href="category-posts.html" class="category__button">Wild Life</a>
-            <h2 class="post__title"><a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a></h2>
-            <p class="post__body">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
-        </div>
-        <div class="post__author">
-            <div class="post__author-avatar">
-                <img src="./images/image_avatar.jpg">
+<?php if(mysqli_num_rows($featured_result) == 1) : ?>
+    <!-- Рекомендумые -->
+    <section class="featured">
+        <div class="container featured__container">
+            <div class="post__thumbnail">
+                <img src="./images/<?= $featured['thumbnail'] ?>">
             </div>
-            <div class="post__author-info">
-                <h5>Amangeldi Yelkhan</h5>
-                <small>15 Апреля 2023, 17:05</small>
+            <div class="post__info">
+                <?php 
+                // Предназначена для вывода категории и последующий переходом на все посты категории
+                $category_id = $featured['category_id'];
+                $category_query = "SELECT * FROM categories WHERE id=$category_id";
+                $category_result = mysqli_query($connection, $category_query);
+                $category = mysqli_fetch_assoc($category_result);
+                $category_title = $category['title']
+                ?>
+                <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $category['id'] ?>" class="category__button"><?= $category_title ?></a>
+                <h2 class="post__title"><a href="<?= ROOT_URL ?>post.php?id=<?= $featured['id'] ?>"><?= $featured['title'] ?></a></h2>
+                <p class="post__body"><?= substr($featured['body'], 0, 300) ?>...</p>
+            </div>
+            <div class="post__author">
+                <div class="post__author-avatar">
+                    <img src="./images/image_avatar.jpg">
+                </div>
+                <div class="post__author-info">
+                    <h5>Amangeldi Yelkhan</h5>
+                    <small>15 Апреля 2023, 17:05</small>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-    <!-- ----------------------END FEATURED---------------------- -->
+    </section>
+<?php endif ?>
+    <!-- ----------------------Конец рекомендумого---------------------- -->
 
 
 <section class="posts">

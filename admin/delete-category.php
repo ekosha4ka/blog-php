@@ -7,12 +7,6 @@ if(isset($_GET['id'])) {
     $query = "SELECT * FROM categories WHERE id=$id";
     $result = mysqli_query($connection, $query);
     $category = mysqli_fetch_assoc($result);
-
-    
-
-
-
-
     $delete_category = "DELETE FROM categories WHERE id=$id";
     $delete_category_result = mysqli_query($connection, $delete_category);
     if(mysqli_errno($connection)) {

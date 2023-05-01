@@ -16,6 +16,17 @@ if(isset($_GET['id'])) {
         }
     }
 
+    // При удалении пользователя, удаляется и все его публикации!!!!!!!
+    $thumbnails_query = "SELECT thumbnail FROM posts WHERE author_id=$id";
+    $thumbnails_result = mysqli_query($connection, $thumbnails_query);
+    if(mysqli_num_rows($thumbnails_result) > 0) {
+        while($thumbnail = mysqli_fetch_assoc($thumbnails_result)) {
+            $thumbnail_path = '../images/' . $thumbnail['thumbnail'];
+            if ($thumbnail_path) {
+                unlink($thumbnail_path);
+            }
+        }
+    }
 
 
 

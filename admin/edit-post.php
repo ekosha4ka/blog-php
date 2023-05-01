@@ -2,39 +2,54 @@
 
 include  'partials/header.php';
 
+// Вывод всех категории из базы данных 
+$query = "SELECT * FROM categories";
+$categories = mysqli_query($connection, $query);
+
+if (isset($_GET['id'])) {
+    
+    $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+    $query = "SELECT * FROM posts WHERE id=$id";
+    $result = mysqli_query($connection, $query);
+    $post = mysqli_fetch_assoc($result);
+} else {
+    header('location: ' . ROOT_URL . 'admin/index.php');
+    die();
+}
+
 ?>
 
 <section class="form__section">
     <div class="container form__section-container">
         <h2>Редактировать пост</h2>
         
-        <form action="" enctype="multipart/form-data">
-            <input type="text" placeholder="Название поста">
-            <select>
-                <option value="1">Путешествование</option>
-                <option value="1">Еда</option>
-                <option value="1">Технологии</option>
-                <option value="1">Дикая жизнь</option>
-                <option value="1">Музыка</option>
-                <option value="1">Искусство</option>
+        <form action="<?= ROOT_URL ?>admin/edit-post-logic.php" enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="id"  value="<?= $post['id']?>">
+            <input type="hidden" name="previous_thumbnail_name"  value="<?= $post['thumbnail']?>">
+            <input type="text" name="title" placeholder="Название поста" value="<?= $post['title']?>">
+            <select name="category">
+                <?php while($category = mysqli_fetch_assoc($categories)) : ?>
+                    <option value="<?= $category['id'] ?>" ><?= $category['title'] ?></option>
+                <?php endwhile ?>
             </select>
-            
-            <textarea rows="10" placeholder="Описание"></textarea>
-            <div class="form__control inline">
-                <input type="checkbox" id="is_featured" checked>
-                <label for="is_featured">Рекомендуемые</label>
-            </div>
+            <textarea rows="10" name="body" placeholder="Описание"><?= $post['body']?></textarea>
+            <?php if(isset($_SESSION['user_is_admin'])) : ?>
+                <div class="form__control inline">
+                    <input type="checkbox" name="is_featured" id="is_featured" value="1" checked>
+                    <label for="is_featured">Рекомендуемые</label>
+                </div>
+            <?php endif ?>
             <div class="form__control">
                 <label for="thumbnail">Редактировать фото</label>
-                <input type="file" id="thumbnail">
+                <input type="file" name="thumbnail" id="thumbnail">
             </div>
-            <button type="submit" class="btn">Редактировать пост</button>
+            <button type="submit" name="submit" class="btn">Редактировать пост</button>
         </form>
     </div>
 </section>
 
 <?php
 
-include 'partials/footer.php';
+include '../partials/footer.php';
 
 ?>

@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
             <textarea rows="10" name="body" placeholder="Описание"><?= $post['body']?></textarea>
             <?php if(isset($_SESSION['user_is_admin'])) : ?>
                 <div class="form__control inline">
-                    <input type="checkbox" name="is_featured" id="is_featured" value="1" checked>
+                    <input type="checkbox" name="is_featured" id="is_featured" value="1" >
                     <label for="is_featured">Рекомендуемые</label>
                 </div>
             <?php endif ?>

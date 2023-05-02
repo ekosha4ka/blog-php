@@ -6,7 +6,15 @@ include 'partials/header.php';
 $featured_query = "SELECT * FROM posts WHERE is_featured=1";
 $featured_result = mysqli_query($connection, $featured_query);
 $featured = mysqli_fetch_assoc($featured_result);
+
+
+// извлечь 9 записей из таблицы post
+$query = "SELECT * FROM posts ORDER BY date_time DESC LIMIT 9";
+$posts = mysqli_query($connection, $query);
+
 ?>
+
+<!-- Появляется в случае, если есть хоть один пост с галкой на рекомендумые -->
 <?php if(mysqli_num_rows($featured_result) == 1) : ?>
     <!-- Рекомендумые -->
     <section class="featured">
@@ -23,17 +31,26 @@ $featured = mysqli_fetch_assoc($featured_result);
                 $category = mysqli_fetch_assoc($category_result);
                 $category_title = $category['title']
                 ?>
-                <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $category['id'] ?>" class="category__button"><?= $category_title ?></a>
+                <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $featured['category_id'] ?>" class="category__button"><?= $category_title ?></a>
                 <h2 class="post__title"><a href="<?= ROOT_URL ?>post.php?id=<?= $featured['id'] ?>"><?= $featured['title'] ?></a></h2>
                 <p class="post__body"><?= substr($featured['body'], 0, 300) ?>...</p>
             </div>
             <div class="post__author">
+                <?php 
+                // Извлекаем автора поста из базы данных таблицы users
+                $author_id = $featured['author_id'];
+                $author_query = "SELECT * FROM users WHERE id=$author_id";
+                $author_result = mysqli_query($connection, $author_query);
+                $author = mysqli_fetch_assoc($author_result);
+                ?>
                 <div class="post__author-avatar">
-                    <img src="./images/image_avatar.jpg">
+                    <img src="./images/<?= $author['avatar'] ?>">
                 </div>
                 <div class="post__author-info">
-                    <h5>Amangeldi Yelkhan</h5>
-                    <small>15 Апреля 2023, 17:05</small>
+                    <h5><?= "{$author['firstname']} {$author['lastname']}" ?></h5>
+                    <small>
+                        <?= date("M d, Y - H:i", strtotime($featured['date_time'])) ?> 
+                    </small>
                 </div>
             </div>
         </div>
@@ -44,215 +61,59 @@ $featured = mysqli_fetch_assoc($featured_result);
 
 <section class="posts">
     <div class="container posts__container">
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/food.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="category-posts.html" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar1.jpg">
+        <?php while($post = mysqli_fetch_assoc($posts)) : ?>
+            <article class="post">
+                <div class="post__thumbnail">
+                    <img src="./images/<?= $post['thumbnail'] ?>" >
+                </div>  
+                <div class="post__info">
+                    <?php 
+                    // Предназначена для вывода категории и последующий переходом на все посты категории
+                    $category_id = $post['category_id'];
+                    $category_query = "SELECT * FROM categories WHERE id=$category_id";
+                    $category_result = mysqli_query($connection, $category_query);
+                    $category = mysqli_fetch_assoc($category_result);
+                    $category_title = $category['title']
+                    ?>
+                    <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $post['category_id'] ?>" class="category__button"><?= $category_title ?></a>
+                    <h3 class="post__title">
+                        <a href="<?= ROOT_URL ?>post.php?id=<?= $post['id'] ?>"><?= $post['title'] ?></a>
+                    </h3>
+                    <p class="post_body">
+                        <?= substr($post['body'], 0, 150) ?> ...
+                    </p>
                 </div>
-                <div class="post_author-info">
-                    <h5>By: Raimbek Taskozhin</h5>
-                    <small>15 Апреля 2023, 18:48</small>
+                <div class="post__author">
+                    <?php 
+                    // Извлекаем автора поста из базы данных таблицы users
+                    $author_id = $post['author_id'];
+                    $author_query = "SELECT * FROM users WHERE id=$author_id";
+                    $author_result = mysqli_query($connection, $author_query);
+                    $author = mysqli_fetch_assoc($author_result);
+                    ?>
+                    <div class="post__author-avatar">
+                        <img src="./images/<?= $author['avatar'] ?>">
+                    </div>
+                    <div class="post_author-info">
+                        <h5><?= "{$author['firstname']} {$author['lastname']}" ?></h5>
+                        <small>
+                        <?= date("M d, Y - H:i", strtotime($post['date_time'])) ?> 
+                        </small>
+                    </div>
                 </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog1.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar10.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: John Mall</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog10.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/pexels-ruby-ruby-13069698.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Kairat Kairzhanov</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog101.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar11.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Yelkhan Amangeldi</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog102.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar12.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Aigerim Bekzatovna</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog11.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar13.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Aigerim Bekzatovna</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog12.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar14.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Aigerim Bekzatovna</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/blog13.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/avatar15.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Aigerim Bekzatovna</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-        <article class="post">
-            <div class="post__thumbnail">
-                <img src="./images/food.jpg" alt="">
-            </div>  
-            <div class="post__info">
-                <a href="" class="category__button">Wild Life</a>
-                <h3 class="post__title">
-                    <a href="post.html">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</a>
-                </h3>
-                <p class="post_body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi soluta molestiae minus totam quisquam dolorem consectetur quam maiores, a modi dolorum, delectus quidem?                    </p>
-            </div>
-            <div class="post__author">
-                <div class="post__author-avatar">
-                    <img src="./images/pexels-ruby-ruby-13069698.jpg">
-                </div>
-                <div class="post_author-info">
-                    <h5>By: Aigerim Bekzatovna</h5>
-                    <small>15 Апреля 2023, 18:48</small>
-                </div>
-            </div>
-        </article>
-                <!-- ----------------------END POSTS---------------------- -->
+            </article>
+        <?php endwhile ?>
     </div>
 </section>
 <section class="category__buttons">
     <div class="container category__buttons-container">
-        <a href="" class="category__button">Искусство</a>
-        <a href="" class="category__button">Дикая жизнь</a>
-        <a href="" class="category__button">Путешествовать</a>
-        <a href="" class="category__button">Технологии</a>
-        <a href="" class="category__button">Еда</a>
-        <a href="" class="category__button">Музыка</a>
+        <?php
+        $all_categories_query = "SELECT * FROM categories";
+        $all_categories= mysqli_query($connection, $all_categories_query);
+        ?>
+        <?php while($category = mysqli_fetch_assoc($all_categories)) : ?>
+            <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $category['id'] ?>" class="category__button"><?= $category['title']?></a>
+        <?php endwhile ?>
     </div>
 </section>
     <!-- ----------------------END CATEGORY BUTTONS---------------------- -->

@@ -1,24 +1,17 @@
 <?php
 include 'partials/header.php';
-$query = "SELECT * FROM posts ORDER BY date_time DESC LIMIT 9";
-$posts = mysqli_query($connection, $query);
+
+if(isset($_GET['search']) && isset($_GET['submit'])) {
+    $search = filter_var($_GET['search'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $query = "SELECT * FROM posts WHERE title LIKE '%$search%' ORDER BY date_time DESC";
+    $posts = mysqli_query($connection, $query); 
+} else {
+    header('location: ' . ROOT_URL . 'blog.php');
+    die();
+}
 
 ?>
-<!-- ----------------------END NAVBAR---------------------- -->
-
-<section class="search__bar">
-    <form class="container search__bar-container" action="<?= ROOT_URL ?>search.php" method="GET">
-        <div>
-            <i class="uil uil-search"></i>
-            <input type="search" name="search" placeholder="Search">
-        </div>
-        <button type="submit" name="submit" class="btn">Go</button>
-    </form>
-</section>
-    <!-- ----------------------END SEARCH---------------------- -->
-
-
-    <section class="posts <?= $featured ? '' : 'section__extra-margin' ?>" >
+<section class="posts <?= $posts ? '' : 'section__extra-margin' ?>" >
     <div class="container posts__container">
         <?php while($post = mysqli_fetch_assoc($posts)) : ?>
             <article class="post">
@@ -64,22 +57,7 @@ $posts = mysqli_query($connection, $query);
         <?php endwhile ?>
     </div>
 </section>
-<section class="category__buttons">
-    <div class="container category__buttons-container">
-        <?php
-        $all_categories_query = "SELECT * FROM categories";
-        $all_categories= mysqli_query($connection, $all_categories_query);
-        ?>
-        <?php while($category = mysqli_fetch_assoc($all_categories)) : ?>
-            <a href="<?= ROOT_URL ?>category-posts.php?id=<?= $category['id'] ?>" class="category__button"><?= $category['title']?></a>
-        <?php endwhile ?>
-    </div>
-</section>
-    <!-- ----------------------END CATEGORY BUTTONS---------------------- -->
 
-
-    <?php
-
-include 'partials/footer.php';
-
+<?php
+include 'partials/footer.php'; 
 ?>

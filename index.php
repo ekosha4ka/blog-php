@@ -17,7 +17,7 @@ $posts = mysqli_query($connection, $query);
 <!-- Появляется в случае, если есть хоть один пост с галкой на рекомендумые -->
 <?php if(mysqli_num_rows($featured_result) == 1) : ?>
     <!-- Рекомендумые -->
-    <section class="featured">
+    <section class="featured" >
         <div class="container featured__container">
             <div class="post__thumbnail">
                 <img src="./images/<?= $featured['thumbnail'] ?>">
@@ -59,7 +59,7 @@ $posts = mysqli_query($connection, $query);
     <!-- ----------------------Конец рекомендумого---------------------- -->
 
 
-<section class="posts">
+<section class="posts <?= $featured ? '' : 'section__extra-margin' ?>" >
     <div class="container posts__container">
         <?php while($post = mysqli_fetch_assoc($posts)) : ?>
             <article class="post">

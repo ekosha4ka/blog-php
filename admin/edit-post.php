@@ -33,12 +33,7 @@ if (isset($_GET['id'])) {
                 <?php endwhile ?>
             </select>
             <textarea rows="10" name="body" placeholder="Описание"><?= $post['body']?></textarea>
-            <?php if(isset($_SESSION['user_is_admin'])) : ?>
-                <div class="form__control inline">
-                    <input type="checkbox" name="is_featured" id="is_featured" value="1" >
-                    <label for="is_featured">Рекомендуемые</label>
-                </div>
-            <?php endif ?>
+            
             <div class="form__control">
                 <label for="thumbnail">Редактировать фото</label>
                 <input type="file" name="thumbnail" id="thumbnail">
@@ -53,3 +48,4 @@ if (isset($_GET['id'])) {
 include '../partials/footer.php';
 
 ?>
+<?= var_dump($_GET) ?>
